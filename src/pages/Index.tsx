@@ -1,19 +1,32 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useMemo, useRef, useState } from "react";
+import "../App.css";
+import { Archive, ChevronDown, FilePlus2, ImagePlus, Search, ShieldAlert, Terminal, Trash2, Upload } from "lucide-react";
 
-import { MadeWithDyad } from "@/components/made-with-dyad";
-
-const Index = () => {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">
-          Start building your amazing project here!
-        </p>
-      </div>
-      <MadeWithDyad />
-    </div>
-  );
-};
-
-export default Index;
+type Record = { id: string; name: string; alias: string; age: string; rank: string; unit: string; origin: string; status: string; notes: string; photos: string[] };
+const initial: Record[] = [
+  { id: "CI-041", name: "Alexei Pols", alias: "Vitae", age: "37", rank: "Dreadnaught / Commando", unit: "Medical Detachment", origin: "Siberian Plains, Russia", status: "ACTIVE", notes: "Field medic. Former GRU-P liaison; reassigned to the Dreadnaught cadre. Subject demonstrates exceptional composure under anomalous exposure.", photos: [] },
+  { id: "CI-017", name: "Irina Volkova", alias: "Moth", age: "34", rank: "Senior Operative", unit: "Signals & Recon", origin: "Novosibirsk, USSR", status: "ON LEAVE", notes: "Long-range communications specialist. Recovered from an abandoned listening post near the Urals.", photos: [] },
+  { id: "CI-088", name: "Mikhail Orlov", alias: "Rook", age: "42", rank: "Quartermaster", unit: "Logistics Cell", origin: "Minsk, Byelorussian SSR", status: "ACTIVE", notes: "Maintains pre-1991 equipment stores and field supply chains.", photos: [] },
+];
+const photoFallback = "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1000&q=80";
+export default function Index() {
+  const [records, setRecords] = useState<Record[]>(() => { try { const saved = localStorage.getItem("vitae-roster"); return saved ? JSON.parse(saved) : initial; } catch { return initial; } });
+  const [selected, setSelected] = useState("CI-041"); const [query, setQuery] = useState(""); const [editing, setEditing] = useState(false); const [galleryIndex, setGalleryIndex] = useState(0); const fileRef = useRef<HTMLInputElement>(null);
+  const active = records.find((r) => r.id === selected) ?? records[0];
+  const filtered = useMemo(() => records.filter((r) => `${r.name} ${r.alias} ${r.id} ${r.unit}`.toLowerCase().includes(query.toLowerCase())), [records, query]);
+  const save = (next: Record[]) => { setRecords(next); localStorage.setItem("vitae-roster", JSON.stringify(next)); };
+  const update = (key: keyof Record, value: string) => save(records.map((r) => r.id === active.id ? { ...r, [key]: value } : r));
+  const add = () => { const row: Record = { id: `CI-${String(Math.floor(Math.random() * 900) + 100)}`, name: "New Operative", alias: "Unassigned", age: "—", rank: "Operative", unit: "Unassigned", origin: "Unknown", status: "PENDING", notes: "Awaiting personnel assessment.", photos: [] }; save([row, ...records]); setSelected(row.id); setEditing(true); };
+  const importPhotos = (files: FileList | null) => { if (!files?.length) return; const urls = Array.from(files).filter((f) => f.type.startsWith("image/")).map((f) => URL.createObjectURL(f)); save(records.map((r) => r.id === active.id ? { ...r, photos: [...r.photos, ...urls] } : r)); setGalleryIndex(0); };
+  if (!active) return null;
+  const field = (label: string, key: keyof Record) => <label className="data-row"><span className="prompt">&gt;{label}</span><span className="dash">—</span><input aria-label={label} value={String(active[key])} onChange={(e) => update(key, e.target.value)} readOnly={!editing} className={editing ? "editable" : ""} /></label>;
+  const image = active.photos[galleryIndex] || photoFallback;
+  return <main className="terminal-shell"><div className="topline"><div className="brand"><span className="sigil">⟁</span><span>VITAE<span className="muted"> / DCB</span></span></div><div className="top-meta"><span><i className="live-dot"/> SECURE NODE // 04</span><span>FIELD ARCHIVE&nbsp; <b>v.2.7</b></span><span className="classification">◆ RESTRICTED</span></div></div>
+    <section className="hero"><div><div className="eyebrow">CHAOS INSURGENCY&nbsp; / &nbsp;PERSONNEL ARCHIVE</div><h1>Personnel <em>records</em></h1><p>Remnant cadre // operational registry <span className="cursor">_</span></p></div><div className="hero-stamp"><span>ДОКУМЕНТ</span><b>CI—{String(records.length).padStart(3, "0")}</b><small>INTERNAL USE ONLY</small></div></section>
+    <div className="workspace"><aside className="roster"><div className="panel-heading"><div><span className="section-index">01 / INDEX</span><h2>Roster <span>({filtered.length.toString().padStart(2,"0")})</span></h2></div><button className="icon-btn" onClick={add} title="Add operative"><FilePlus2 size={17}/></button></div><div className="searchbox"><Search size={15}/><input placeholder="Search personnel..." value={query} onChange={(e) => setQuery(e.target.value)}/><span>⌘ K</span></div><div className="roster-list">{filtered.map((r) => <button className={`roster-card ${r.id === active.id ? "selected" : ""}`} key={r.id} onClick={() => { setSelected(r.id); setEditing(false); setGalleryIndex(0); }}><div className="avatar">{r.photos[0] ? <img src={r.photos[0]} alt=""/> : <span>{r.name.split(" ").map(x=>x[0]).join("").slice(0,2)}</span>}</div><div className="roster-copy"><strong>{r.name}</strong><span>“{r.alias}” <i>·</i> {r.id}</span><small>{r.unit}</small></div><span className={`status-dot ${r.status === "ACTIVE" ? "" : "idle"}`}/></button>)}</div><div className="roster-foot"><Archive size={14}/> ARCHIVE SYNCED <span>LOCAL</span></div></aside>
+    <article className="profile"><div className="profile-head"><div><span className="section-index">02 / DOSSIER&nbsp; · &nbsp;{active.id}</span><h2>{active.name}</h2><div className="alias-line">CALLSIGN <strong>“{active.alias}”</strong><span className="status-pill"><i className={`status-dot ${active.status === "ACTIVE" ? "" : "idle"}`}/>{active.status}</span></div></div><div className="actions"><button className={`text-btn ${editing ? "active" : ""}`} onClick={() => setEditing(!editing)}>{editing ? "✓ SAVE RECORD" : "✎ EDIT FILE"}</button><button className="text-btn upload-btn" onClick={() => fileRef.current?.click()}><ImagePlus size={15}/> IMPORT PHOTO</button><input ref={fileRef} type="file" accept="image/*" multiple hidden onChange={(e) => importPhotos(e.target.files)}/></div></div>
+      <div className="profile-grid"><section className="details"><div className="subhead"><span>PERSONNEL DATA</span><span className="line"/></div><div className="fields">{field("Government name", "name")}{field("Alias", "alias")}{field("Age", "age")}{field("Position", "rank")}{field("Unit", "unit")}{field("Birth place", "origin")}{field("Status", "status")}</div><div className="subhead notes-title"><span>FIELD NOTES / DEBRIEF</span><span className="line"/></div><textarea className={editing ? "editable" : ""} readOnly={!editing} value={active.notes} onChange={(e)=>update("notes",e.target.value)} aria-label="Field notes"/></section>
+      <section className="visual"><div className="subhead"><span>VISUAL IDENTIFICATION</span><span className="line"/></div><div className="photo-frame"><img src={image} alt={`${active.name} identification file`}/><div className="photo-overlay"><span>FIG. 01&nbsp; / &nbsp;FIELD CAPTURE</span><span>ARCHIVE // 1987</span></div><div className="photo-corner top-left"/><div className="photo-corner bottom-right"/>{active.photos.length > 1 && <><button className="photo-arrow left" onClick={()=>setGalleryIndex((galleryIndex+active.photos.length-1)%active.photos.length)}>‹</button><button className="photo-arrow right" onClick={()=>setGalleryIndex((galleryIndex+1)%active.photos.length)}>›</button></>}</div><div className="photo-meta"><span><b>IMG_{String(galleryIndex+1).padStart(2,"0")}</b> // {active.photos.length ? `${active.photos.length} ATTACHED` : "REFERENCE IMAGE"}</span><button onClick={()=>fileRef.current?.click()}><Upload size={13}/> ADD</button></div>{active.photos.length > 0 && <div className="thumbs">{active.photos.map((src,i)=><button key={src} className={galleryIndex===i?"thumb active":"thumb"} onClick={()=>setGalleryIndex(i)}><img src={src} alt={`Attachment ${i+1}`}/></button>)}</div>}</section></div>
+      <div className="record-footer"><span><ShieldAlert size={14}/> UNAUTHORIZED DISTRIBUTION PROHIBITED</span><span>LAST REVIEWED&nbsp; / &nbsp;14—02—1987</span><button aria-label="Delete record" onClick={()=>{if(records.length>1){const next=records.filter(r=>r.id!==active.id); save(next); setSelected(next[0].id);}}}><Trash2 size={14}/></button></div>
+    </article></div><footer className="bottomline"><span><Terminal size={13}/> NODE 04 / VOLGA SECTOR</span><span>ЗАКРЫТЫЙ АРХИВ <ChevronDown size={13}/></span><span>END OF FILE <b>■</b></span></footer></main>;
+}
