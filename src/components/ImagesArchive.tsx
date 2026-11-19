@@ -7,6 +7,7 @@ const images = [
   { src: "/alexei-archive-03.png", alt: "Alexei's archived roleplay screenshot 3" },
   { src: "/alexei-archive-04.png", alt: "Alexei's archived roleplay screenshot 4" },
   { src: "/alexei-archive-05.png", alt: "Alexei's archived roleplay screenshot 5" },
+  { src: "/alexei-archive-06.png", alt: "Alexei's archived roleplay screenshot 6" },
 ];
 
 export default function ImagesArchive() {
