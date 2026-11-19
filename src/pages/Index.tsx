@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import "../App.css";
 import "../logo.css";
 import "../comms.css";
+import "../remove-delete.css";
 import { Archive, ChevronDown, FilePlus2, Search, ShieldAlert, Terminal, Trash2, Radio, LockKeyhole, Signal } from "lucide-react";
 
 type Record = { id: string; name: string; alias: string; age: string; rank: string; unit: string; origin: string; status: string; notes: string };
@@ -17,7 +18,7 @@ const communications = [
   { id: "CI-203", callsign: "[REDACTED]", channel: "DEAD-DROP COURIER", frequency: "OFFLINE", status: "NO SIGNAL", time: "02:11 ZULU" },
 ];
 export default function Index() {
-  const [records, setRecords] = useState<Record[]>(() => { try { const saved = localStorage.getItem("vitae-roster"); const loaded: Record[] = saved ? JSON.parse(saved) : initial; return loaded.map(redact); } catch { return initial; } });
+  const [records, setRecords] = useState<Record[]>(() => { try { const saved = localStorage.getItem("vitae-roster"); const loaded: Record[] = saved ? JSON.parse(saved) : initial; const restored = [...loaded, ...initial.filter((entry) => !loaded.some((record) => record.id === entry.id))]; return restored.map(redact); } catch { return initial; } });
   const [selected, setSelected] = useState("CI-041"); const [query, setQuery] = useState(""); const [tab, setTab] = useState<"dossier" | "communications">("dossier");
   const active = records.find((r) => r.id === selected) ?? records[0];
   const filtered = useMemo(() => records.filter((r) => `${r.name} ${r.alias} ${r.id} ${r.unit}`.toLowerCase().includes(query.toLowerCase())), [records, query]);
