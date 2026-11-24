@@ -13,11 +13,11 @@ import { Archive, ChevronDown, Search, ShieldAlert, Terminal, Trash2, Radio, Loc
 
 type Record = { id: string; name: string; alias: string; age: string; rank: string; unit: string; origin: string; status: string; notes: string };
 const initial: Record[] = [
-  { id: "CI-041", name: "Jasper Wescott", alias: "Reliquary", age: "26", rank: "Dreadnaught Commando", unit: "Dreadnaught Commando", origin: "Saint Just, England", status: "ACTIVE", notes: "Always served as a Dreadnaught Commando. Demonstrates above-and-beyond composure under anomalous exposure." },
+  { id: "CI-041", name: "Jasper Wescott", alias: "Reliquary", age: "26", rank: "Auctioned asset — SOLD", unit: "Formerly held by MC&D", origin: "Saint Just, England", status: "SOLD", notes: "Offered at auction and sold. Sale location and transaction details remain sealed." },
   { id: "CI-017", name: "SOLD", alias: "SOLD", age: "SOLD", rank: "SOLD", unit: "SOLD", origin: "SOLD", status: "SOLD", notes: "SOLD" },
   { id: "CI-088", name: "SOLD", alias: "SOLD", age: "SOLD", rank: "SOLD", unit: "SOLD", origin: "SOLD", status: "SOLD", notes: "SOLD" },
 ];
-const redact = (record: Record): Record => record.id === "CI-041" ? { ...record, rank: "Dreadnaught Commando", unit: "Dreadnaught Commando", notes: "Always served as a Dreadnaught Commando. Demonstrates above-and-beyond composure under anomalous exposure." } : { ...record, name: "SOLD", alias: "SOLD", age: "SOLD", rank: "SOLD", unit: "SOLD", origin: "SOLD", status: "SOLD", notes: "SOLD" };
+const redact = (record: Record): Record => record.id === "CI-041" ? { ...record, rank: "Auctioned asset — SOLD", unit: "Formerly held by MC&D", status: "SOLD", notes: "Offered at auction and sold. Sale location and transaction details remain sealed." } : { ...record, name: "SOLD", alias: "SOLD", age: "SOLD", rank: "SOLD", unit: "SOLD", origin: "SOLD", status: "SOLD", notes: "SOLD" };
 const Barcode = ({ value }: { value: string }) => <span className="barcode" aria-label="Archive barcode">{value.split("").map((character, index) => <i key={index} style={{ width: `${2 + (character.charCodeAt(0) % 3)}px` }} />)}</span>;
 const contactNames = ["Junkrat", "Blank", "Pawn", "LLENN", "Abysm", "Jidovi", "Callidus", "Global", "Dahlia", 'Dmitri "Krov" Morozov', "Longshot", "Munin", "Schism", "Ripperdoc", "Druid", "Destro", "Forgemaster", "Blight", "Subjugation", "AZ", "Seven", "Desperado", "Obsidian"];
 const communications = contactNames.map((callsign, index) => ({ id: `LINK-${String(index + 1).padStart(2, "0")}`, callsign, channel: "ENCRYPTED SHORTWAVE", frequency: "CLASSIFIED", status: callsign === "Pawn" || callsign === "Blank" || callsign === 'Dmitri "Krov" Morozov' ? "NO SIGNAL" : "AVAILABLE", time: "REDACTED" }));
