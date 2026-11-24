@@ -35,3 +35,5 @@
 .brand-logo{filter:grayscale(1) brightness(1.65) sepia(.7) hue-rotate(235deg) saturate(1.5)}
 
 .barcode{display:inline-flex;align-items:center;height:18px;gap:1px;vertical-align:middle;min-width:36px}.barcode i{display:block;height:13px;background:#e4c8f5}.roster-copy .barcode{height:14px}.roster-copy .barcode i{height:10px}
+
+.assignment-mark img{width:74px;height:74px;object-fit:contain;border-radius:50%}
