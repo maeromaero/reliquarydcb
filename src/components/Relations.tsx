@@ -4,7 +4,7 @@ import { ShieldAlert, UsersRound } from "lucide-react";
 const relation = {
   name: 'Don "Carlos"',
   tone: "negative",
-  note: "Relationship classified as negative. Further details are withheld.",
+  note: "An asshole. He ruined my life. All over one singular deal.",
 };
 
 export function Relations() {
