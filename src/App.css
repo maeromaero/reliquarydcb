@@ -17,3 +17,18 @@
 .comms-heading h3,.medical-log h3{color:#eee4cd}
 .comms-row,.images-archive{border-color:#403729}
 .encrypted{color:#d0ad68}
+
+/* MC&D identity: black-on-violet corporate mark */
+.terminal-shell{--green:#dfc4ef;--dim:#a691b3;--line:#49374f;background-color:#100b13;background-image:linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px)}
+.terminal-shell:before{background:radial-gradient(ellipse at 48% 0%,rgba(105,48,123,.24),transparent 58%)}
+.eyebrow,.section-index,.prompt,.hero h1 em,.roster-foot span,.bottomline b{color:#d9a9ef}
+.live-dot,.status-dot{background:#bd70dc;box-shadow:0 0 9px #a653c5}
+.status-dot.idle{background:#87758f;box-shadow:0 0 8px #61476d}
+.hero-stamp{color:#d292e9;border-color:#704786}.hero-stamp small{color:#b092bd}
+.roster-card.selected{border-color:#62426d;background:#19111d}.roster-card.selected:before{background:#d9a9ef}
+.avatar{background:#211526;border-color:#60406e;color:#d7a8ed}
+.icon-btn,.text-btn.active{color:#d9a9ef;border-color:#704786}
+.data-row input.editable,.profile textarea.editable{border-color:#75468a;background:#17101b}
+.record-tab.active{color:#d9a9ef;border-color:#d9a9ef}
+.encrypted{color:#d9a9ef}
+.brand-logo{filter:grayscale(1) brightness(1.65) sepia(.7) hue-rotate(235deg) saturate(1.5)}
