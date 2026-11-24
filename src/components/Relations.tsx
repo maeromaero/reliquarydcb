@@ -5,6 +5,7 @@ import { ShieldAlert, UsersRound } from "lucide-react";
 const relations = [
   { name: 'Don "Carlos"', tone: "negative", note: "An asshole. He ruined my life. All over one singular deal." },
   { name: "Varg", tone: "positive", note: "One of the few people who I thought I wouldnt have a friendship with. Its crazy to think how well you can get along with someone who you'd never have spoken with from the start." },
+  { name: "BASTARD", tone: "positive", note: "A more serious man that I will willingly show respect to. I honestly thought I was going to be left for dead and sold off to someone who was going to leave me to rot. But Im glad I was wrong." },
 ];
 
 export function Relations() {
