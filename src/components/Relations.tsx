@@ -4,7 +4,7 @@ import { ShieldAlert, UsersRound } from "lucide-react";
 
 const relations = [
   { name: 'Don "Carlos"', tone: "negative", note: "An asshole. He ruined my life. All over one singular deal." },
-  { name: "Varg", tone: "positive", note: "A valued contact. A positive relationship is on record." },
+  { name: "Varg", tone: "positive", note: "One of the few people who I thought I wouldnt have a friendship with. Its crazy to think how well you can get along with someone who you'd never have spoken with from the start." },
 ];
 
 export function Relations() {
